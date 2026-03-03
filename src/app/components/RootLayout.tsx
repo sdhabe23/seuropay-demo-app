@@ -1,19 +1,24 @@
 import React from "react";
 import { Outlet } from "react-router";
 
-// Detect if running as an installed PWA (standalone/fullscreen) or on a mobile browser
+// Detect if running as an installed PWA (standalone/fullscreen)
 const isPWA =
   window.matchMedia("(display-mode: fullscreen)").matches ||
   window.matchMedia("(display-mode: standalone)").matches ||
   (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
 
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+// Detect any touch/mobile device — never show the fake frame on real phones
+const isMobile =
+  /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+  ("ontouchstart" in window && window.innerWidth <= 1024);
 
 export function RootLayout(): React.ReactNode {
   // On mobile browser or installed PWA: render full screen with no fake frame
   if (isPWA || isMobile) {
     return (
-      <div className="h-screen w-screen overflow-hidden">
+      // Use dvh (dynamic viewport height) so the app fills the screen
+      // correctly even when the browser address bar is visible on mobile
+      <div style={{ height: "100dvh", width: "100dvw", overflow: "hidden" }}>
         <Outlet />
       </div>
     );
