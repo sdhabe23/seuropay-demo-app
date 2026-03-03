@@ -65,7 +65,7 @@ export function History(): React.ReactNode {
       </div>
 
       {/* Transactions List */}
-      <div className="flex-1 p-6 overflow-y-auto">
+      <div className="flex-1 p-6 overflow-y-auto overscroll-contain">
         <div className={darkMode ? "bg-[#181F32] rounded-2xl shadow-md overflow-hidden" : "bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200"}>
           {filteredTransactions.length > 0 ? (
             filteredTransactions.map((transaction) => (

@@ -45,7 +45,7 @@ export function Home(): React.ReactNode {
   return (
     <div className={darkMode ? "bg-[#10192B] h-full w-full rounded-3xl flex flex-col shadow-xl" : "bg-gradient-to-br from-blue-50 to-indigo-100 h-full w-full rounded-3xl flex flex-col shadow-xl"}>
       {/* Scrollable content area */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-6">
         <div className={darkMode ? "text-[#3AC7B1] text-2xl font-bold mb-8" : "text-blue-600 text-2xl font-bold mb-8"}>SeuroPay</div>
         <div className="flex items-center justify-between mb-2">
           <div className={darkMode ? "text-[#A3B1CC] text-lg" : "text-gray-600 text-lg"}>Available Balance</div>

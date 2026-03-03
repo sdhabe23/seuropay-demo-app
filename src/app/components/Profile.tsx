@@ -23,7 +23,7 @@ export function Profile(): React.ReactNode {
         </div>
       </div>
 
-      <div className="flex-1 p-6 overflow-y-auto">
+      <div className="flex-1 p-6 overflow-y-auto overscroll-contain">
         {/* User Info */}
         <div className={darkMode ? "bg-[#181F32] rounded-2xl shadow-md p-6 mb-6" : "bg-white rounded-2xl shadow-md p-6 mb-6"}>
           <div className="flex items-center gap-4">

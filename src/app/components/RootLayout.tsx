@@ -16,9 +16,7 @@ export function RootLayout(): React.ReactNode {
   // On mobile browser or installed PWA: render full screen with no fake frame
   if (isPWA || isMobile) {
     return (
-      // Use dvh (dynamic viewport height) so the app fills the screen
-      // correctly even when the browser address bar is visible on mobile
-      <div style={{ height: "100dvh", width: "100dvw", overflow: "hidden" }}>
+      <div style={{ height: "100dvh", width: "100dvw", overflow: "hidden", overscrollBehavior: "none" }}>
         <Outlet />
       </div>
     );
