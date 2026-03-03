@@ -43,8 +43,9 @@ export function Home(): React.ReactNode {
   }, [balanceVisible]);
 
   return (
-    <div className={darkMode ? "bg-[#10192B] h-full w-full rounded-3xl p-6 flex flex-col justify-between shadow-xl overflow-y-auto" : "bg-gradient-to-br from-blue-50 to-indigo-100 h-full w-full rounded-3xl p-6 flex flex-col justify-between shadow-xl overflow-y-auto"}>
-      <div>
+    <div className={darkMode ? "bg-[#10192B] h-full w-full rounded-3xl flex flex-col shadow-xl" : "bg-gradient-to-br from-blue-50 to-indigo-100 h-full w-full rounded-3xl flex flex-col shadow-xl"}>
+      {/* Scrollable content area */}
+      <div className="flex-1 overflow-y-auto p-6">
         <div className={darkMode ? "text-[#3AC7B1] text-2xl font-bold mb-8" : "text-blue-600 text-2xl font-bold mb-8"}>SeuroPay</div>
         <div className="flex items-center justify-between mb-2">
           <div className={darkMode ? "text-[#A3B1CC] text-lg" : "text-gray-600 text-lg"}>Available Balance</div>
@@ -107,7 +108,9 @@ export function Home(): React.ReactNode {
           ))}
         </div>
       </div>
-      <div className={darkMode ? "flex justify-between items-center mt-8 bg-[#181F32] rounded-3xl px-4 py-2" : "flex justify-between items-center mt-8 bg-white rounded-3xl px-4 py-2 border border-gray-200"}>
+
+      {/* Fixed nav bar — always visible at bottom */}
+      <div className={darkMode ? "flex-shrink-0 flex justify-between items-center bg-[#181F32] rounded-b-3xl px-4 py-2" : "flex-shrink-0 flex justify-between items-center bg-white rounded-b-3xl px-4 py-2 border-t border-gray-200"}>
         <button onClick={() => navigate("/")} className="flex flex-col items-center hover:opacity-80 transition-opacity">
           <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" stroke="#3AC7B1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           <span className="text-[#3AC7B1] text-xs mt-1">Home</span>
