@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - demoapp
 
 permissions:
   contents: write
