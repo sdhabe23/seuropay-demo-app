@@ -14,9 +14,8 @@
     <title>SeuroPay Consumer App</title>
     <style>
       /* Make app take full viewport height and respect safe-area insets */
-      html, body, #root {
+      html, body {
         height: 100%;
-        max-height: 100dvh;
         margin: 0;
         padding: 0;
         overflow: hidden;
@@ -24,12 +23,15 @@
         background: #10192B;
       }
 
-      /* Use safe-area-inset for iPhone notch/fullscreen cutouts */
       #root {
+        height: 100dvh;
+        overflow: hidden;
+        overscroll-behavior: none;
         padding-top: env(safe-area-inset-top);
         padding-left: env(safe-area-inset-left);
         padding-right: env(safe-area-inset-right);
         padding-bottom: env(safe-area-inset-bottom);
+        box-sizing: border-box;
       }
     </style>
   </head>

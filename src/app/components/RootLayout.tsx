@@ -16,7 +16,7 @@ export function RootLayout(): React.ReactNode {
   // On mobile browser or installed PWA: render full screen with no fake frame
   if (isPWA || isMobile) {
     return (
-      <div style={{ height: "100dvh", width: "100dvw", overflow: "hidden", overscrollBehavior: "none" }}>
+      <div style={{ height: "100%", width: "100%", overflow: "hidden", overscrollBehavior: "none" }}>
         <Outlet />
       </div>
     );
