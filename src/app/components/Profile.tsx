@@ -100,11 +100,8 @@ export function Profile(): React.ReactNode {
       {/* Navigation Bar */}
       <div className={darkMode ? "flex-shrink-0 flex justify-between items-center bg-[#181F32] rounded-b-3xl px-4 py-2" : "flex-shrink-0 flex justify-between items-center bg-white rounded-b-3xl px-4 py-2 border-t border-gray-200"}>
         <button onClick={() => navigate("/")} className="flex flex-col items-center hover:opacity-80 transition-opacity">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={darkMode ? "text-[#A3B1CC]" : "text-gray-400"}>
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-          <span className={darkMode ? "text-[#A3B1CC] text-xs mt-1" : "text-gray-400 text-xs mt-1"}>Home</span>
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" stroke={darkMode ? "#A3B1CC" : "#6b7280"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <span className={darkMode ? "text-[#A3B1CC] text-xs mt-1" : "text-gray-600 text-xs mt-1"}>Home</span>
         </button>
 
         <button onClick={() => navigate("/scan")} className="flex flex-col items-center hover:opacity-80 transition-opacity">
