@@ -112,7 +112,7 @@ export function History(): React.ReactNode {
       </div>
 
       {/* Navigation Bar */}
-      <div className={darkMode ? "flex justify-between items-center mt-8 bg-[#181F32] rounded-3xl px-4 py-2 m-6 flex-shrink-0" : "flex justify-between items-center mt-8 bg-white rounded-3xl px-4 py-2 m-6 border border-gray-200 flex-shrink-0"}>
+      <div className={darkMode ? "flex-shrink-0 flex justify-between items-center bg-[#181F32] rounded-b-3xl px-4 py-2" : "flex-shrink-0 flex justify-between items-center bg-white rounded-b-3xl px-4 py-2 border-t border-gray-200"}>
         <button onClick={() => navigate("/")} className="flex flex-col items-center hover:opacity-80 transition-opacity">
           <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" stroke="#3AC7B1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           <span className="text-[#3AC7B1] text-xs mt-1">Home</span>
