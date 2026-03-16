@@ -1,37 +1,42 @@
-import { ArrowLeft, ArrowUpRight, ArrowDownLeft, Search } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ArrowDownLeft, Search, RefreshCw, Link as LinkIcon, FlaskConical, DatabaseZap } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useState, useMemo } from "react";
-import { getRandomAmount } from "../utils/currency";
 import { useTheme } from "../context/ThemeContext";
+import { useBankData } from "../context/BankContext";
+import { getRandomAmount } from "../utils/currency";
 import React from "react";
 
 export function History(): React.ReactNode {
   const navigate = useNavigate();
   const { darkMode } = useTheme();
+  const { transactions, loading, refresh, linked, txIsDemo, txFromCache } = useBankData();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const allTransactions = useMemo(() => [
-    { id: 1, name: "coffee shop", amount: -getRandomAmount(), date: "Today, 10:30 AM", type: "expense" },
-    { id: 2, name: "Swapnil Kasar", amount: getRandomAmount(), date: "Today, 09:15 AM", type: "income" },
-    { id: 3, name: "grocery store", amount: -getRandomAmount(), date: "Yesterday, 6:45 PM", type: "expense" },
-    { id: 4, name: "Eve Tönissoo", amount: getRandomAmount(), date: "Yesterday, 2:20 PM", type: "income" },
-    { id: 5, name: "restaurant", amount: -getRandomAmount(), date: "Feb 15, 7:30 PM", type: "expense" },
-    { id: 6, name: "Angelika Dhabe", amount: getRandomAmount(), date: "Feb 15, 3:15 PM", type: "income" },
-    { id: 7, name: "pharmacy", amount: -getRandomAmount(), date: "Feb 14, 11:20 AM", type: "expense" },
-    { id: 8, name: "bookstore", amount: -getRandomAmount(), date: "Feb 14, 9:45 AM", type: "expense" },
-    { id: 9, name: "Swapnil Kasar", amount: getRandomAmount(), date: "Feb 13, 4:30 PM", type: "income" },
-    { id: 10, name: "gas station", amount: -getRandomAmount(), date: "Feb 13, 8:00 AM", type: "expense" },
-    { id: 11, name: "repair shop", amount: -getRandomAmount(), date: "Feb 12, 2:00 PM", type: "expense" },
-    { id: 12, name: "Eve Tönissoo", amount: getRandomAmount(), date: "Feb 12, 10:30 AM", type: "income" },
-    { id: 13, name: "bakery", amount: -getRandomAmount(), date: "Feb 11, 7:15 AM", type: "expense" },
-    { id: 14, name: "clothing store", amount: -getRandomAmount(), date: "Feb 10, 5:45 PM", type: "expense" },
-    { id: 15, name: "Angelika Dhabe", amount: getRandomAmount(), date: "Feb 10, 1:00 PM", type: "income" },
-    { id: 16, name: "grocery store", amount: -getRandomAmount(), date: "Feb 9, 6:30 PM", type: "expense" },
-    { id: 17, name: "coffee shop", amount: -getRandomAmount(), date: "Feb 9, 9:00 AM", type: "expense" },
-    { id: 18, name: "electronics store", amount: -getRandomAmount(), date: "Feb 8, 3:20 PM", type: "expense" },
-    { id: 19, name: "Swapnil Kasar", amount: getRandomAmount(), date: "Feb 8, 11:45 AM", type: "income" },
-    { id: 20, name: "cinema", amount: -getRandomAmount(), date: "Feb 7, 8:00 PM", type: "expense" },
-  ], []);
+  // Use real QR + bank payment transactions, fall back to placeholders
+  const allTransactions = useMemo(() => {
+    if (transactions.length > 0) {
+      return transactions.map((t) => ({
+        id: t.id,
+        name: t.counterparty || t.description,
+        amount: t.amount,
+        date: t.date ? new Date(t.date).toLocaleString() : 'Recently',
+        type: t.amount < 0 ? 'expense' : 'income',
+      }));
+    }
+    // Placeholder data
+    return [
+      { id: '1', name: 'coffee shop', amount: -getRandomAmount(), date: 'Today, 10:30 AM', type: 'expense' },
+      { id: '2', name: 'Swapnil Kasar', amount: getRandomAmount(), date: 'Today, 09:15 AM', type: 'income' },
+      { id: '3', name: 'grocery store', amount: -getRandomAmount(), date: 'Yesterday, 6:45 PM', type: 'expense' },
+      { id: '4', name: 'Eve Tönissoo', amount: getRandomAmount(), date: 'Yesterday, 2:20 PM', type: 'income' },
+      { id: '5', name: 'restaurant', amount: -getRandomAmount(), date: 'Feb 15, 7:30 PM', type: 'expense' },
+      { id: '6', name: 'Angelika Dhabe', amount: getRandomAmount(), date: 'Feb 15, 3:15 PM', type: 'income' },
+      { id: '7', name: 'pharmacy', amount: -getRandomAmount(), date: 'Feb 14, 11:20 AM', type: 'expense' },
+      { id: '8', name: 'bookstore', amount: -getRandomAmount(), date: 'Feb 14, 9:45 AM', type: 'expense' },
+      { id: '9', name: 'Swapnil Kasar', amount: getRandomAmount(), date: 'Feb 13, 4:30 PM', type: 'income' },
+      { id: '10', name: 'gas station', amount: -getRandomAmount(), date: 'Feb 13, 8:00 AM', type: 'expense' },
+    ];
+  }, [transactions]);
 
   const filteredTransactions = allTransactions.filter(transaction =>
     transaction.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -48,7 +53,29 @@ export function History(): React.ReactNode {
           >
             <ArrowLeft className={darkMode ? "w-6 h-6" : "w-6 h-6 text-gray-900"} />
           </button>
-          <h1 className={darkMode ? "text-xl" : "text-xl text-gray-900"}>Transaction History</h1>
+          <h1 className={darkMode ? "text-xl" : "text-xl text-gray-900"}>
+            Transaction History
+          </h1>
+
+          {/* Source badges — demo data or served from cache */}
+          {txIsDemo && (
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-medium">
+              <FlaskConical className="w-3 h-3" /> Demo
+            </span>
+          )}
+          {!txIsDemo && txFromCache && (
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#3AC7B1]/20 text-[#3AC7B1] text-xs font-medium">
+              <DatabaseZap className="w-3 h-3" /> Cached
+            </span>
+          )}
+
+          <button
+              onClick={refresh}
+              disabled={loading}
+              className={darkMode ? "ml-auto p-2 hover:bg-white/20 rounded-xl transition-colors" : "ml-auto p-2 hover:bg-gray-100 rounded-xl transition-colors"}
+            >
+              <RefreshCw className={`w-5 h-5 ${loading ? "animate-spin" : ""} ${darkMode ? "text-[#3AC7B1]" : "text-blue-600"}`} />
+            </button>
         </div>
 
         {/* Search Bar */}
@@ -67,6 +94,20 @@ export function History(): React.ReactNode {
       {/* Transactions List */}
       <div className="flex-1 p-6 overflow-y-auto">
         <div className={darkMode ? "bg-[#181F32] rounded-2xl shadow-md overflow-hidden" : "bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200"}>
+          {/* Pay with bank prompt — only shown when not linked */}
+          {!linked && (
+            <div
+              className={darkMode
+                ? "flex items-center gap-3 p-4 border-b border-[#2C3A6A] cursor-pointer hover:bg-[#1A233A] transition-colors"
+                : "flex items-center gap-3 p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors"}
+              onClick={() => navigate("/link-bank")}
+            >
+              <LinkIcon className={darkMode ? "w-5 h-5 text-[#3AC7B1]" : "w-5 h-5 text-blue-600"} />
+              <p className={darkMode ? "text-[#A3B1CC] text-sm" : "text-gray-600 text-sm"}>
+                Tap to pay with your bank via Tink
+              </p>
+            </div>
+          )}
           {filteredTransactions.length > 0 ? (
             filteredTransactions.map((transaction) => (
               <div

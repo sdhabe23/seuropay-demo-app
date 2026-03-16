@@ -30,3 +30,11 @@ pnpm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Backend runtime data (user sessions, tokens - never commit)
+.data/
+
+# Backend env (contains Tink secrets)
+backend/.env
+
+node_modules/

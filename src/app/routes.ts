@@ -24,6 +24,8 @@ import { NFCPayment } from "./components/NFCPayment";
 import { PaymentSuccess } from "./components/PaymentSuccess";
 import { MoneyReceivedSuccess } from "./components/MoneyReceivedSuccess";
 import { ReceiveAmount } from "./components/ReceiveAmount";
+import { PaymentResult } from "./components/PaymentResult";
+import { BankTransfer } from "./components/BankTransfer";
 
 export const router = createHashRouter([
   {
@@ -118,6 +120,14 @@ export const router = createHashRouter([
       {
         path: "money-received",
         Component: MoneyReceivedSuccess,
+      },
+      {
+        path: "payment-result",
+        Component: PaymentResult,
+      },
+      {
+        path: "bank-transfer",
+        Component: BankTransfer,
       },
       {
         path: "*",
