@@ -31,30 +31,47 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # ── Write backend/.env from GitHub Secrets ───────────────────────────────
-      # Add these secrets in: GitHub repo → Settings → Secrets → Actions
-      #   TINK_CLIENT_ID, TINK_CLIENT_SECRET, SESSION_SECRET,
-      #   VITE_API_BASE (e.g. https://api.seuropay.com or your backend URL)
+      # ── Inject secrets into backend/.env ─────────────────────────────────────
+      # Required GitHub Secrets (repo → Settings → Secrets → Actions):
+      #
+      #   TINK_CLIENT_ID      Your Tink sandbox client ID
+      #   TINK_CLIENT_SECRET  Your Tink sandbox client secret
+      #   SESSION_SECRET      Random string: run `openssl rand -hex 32`
+      #
+      # Optional — only needed if you deploy the Node.js backend somewhere:
+      #   BACKEND_URL         e.g. https://seuropay-api.railway.app
+      #                       Leave unset → frontend calls /api/* on same origin
+      #                       (works if you put a reverse proxy in front of both)
       - name: Create backend .env
+        env:
+          TINK_CLIENT_ID: ${{ secrets.TINK_CLIENT_ID }}
+          TINK_CLIENT_SECRET: ${{ secrets.TINK_CLIENT_SECRET }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: |
+          FRONTEND="https://demo.seuropay.com"
+          BACKEND="${BACKEND_URL:-$FRONTEND}"
           cat > backend/.env << EOF
-          TINK_CLIENT_ID=${{ secrets.TINK_CLIENT_ID }}
-          TINK_CLIENT_SECRET=${{ secrets.TINK_CLIENT_SECRET }}
+          TINK_CLIENT_ID=${TINK_CLIENT_ID}
+          TINK_CLIENT_SECRET=${TINK_CLIENT_SECRET}
           TINK_API_BASE=https://api.tink.com
-          TINK_REDIRECT_URI=${{ secrets.VITE_API_BASE }}/api/tink/callback
-          TINK_PIS_REDIRECT_URI=http://localhost:5173
+          TINK_REDIRECT_URI=${FRONTEND}
+          TINK_PIS_REDIRECT_URI=${FRONTEND}
           PORT=4000
-          SESSION_SECRET=${{ secrets.SESSION_SECRET }}
-          FRONTEND_URL=https://demo.seuropay.com
+          SESSION_SECRET=${SESSION_SECRET}
+          FRONTEND_URL=${FRONTEND}
           EOF
 
       - name: Build
         run: pnpm run build
         env:
-          # Baked into the frontend bundle at build time (Vite replaces import.meta.env.*)
-          # Set VITE_API_BASE in GitHub Secrets to your deployed backend URL,
-          # e.g. https://api.seuropay.com  (leave empty to use same-origin proxy)
-          VITE_API_BASE: ${{ secrets.VITE_API_BASE }}
+          # VITE_API_BASE is baked into the JS bundle at build time.
+          # - If BACKEND_URL secret is set (e.g. https://seuropay-api.railway.app),
+          #   the frontend will call that URL for all /api/* requests.
+          # - If NOT set, frontend calls /api/* on the same origin (demo.seuropay.com).
+          #   This works if your hosting proxies /api/* to the backend, or if
+          #   you accept that Tink linking won't work on the static demo.
+          VITE_API_BASE: ${{ secrets.BACKEND_URL }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
