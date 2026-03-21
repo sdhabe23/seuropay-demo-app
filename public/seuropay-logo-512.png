@@ -1,0 +1,9 @@
+PLACEHOLDER: Replace this file with the attached SeuroPay logo image (512x512 PNG).
+
+How to replace:
+1. Save the attached image as a PNG named `seuropay-logo-512.png` in the `public/` folder of the project.
+2. Optionally also add a 192x192 version named `seuropay-logo-192.png` for better Android support.
+
+If you want me to embed the attached image directly into the repo, either:
+- Upload the PNG/JPEG bytes here (I can convert to base64 and embed), or
+- Tell me to embed the attachment as base64 and I'll do it for you.
