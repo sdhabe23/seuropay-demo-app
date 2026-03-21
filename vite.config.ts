@@ -22,23 +22,4 @@ export default defineConfig({
 
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
-
-  server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:4000',
-        changeOrigin: true,
-      },
-      '/ws': {
-        target: 'ws://localhost:4000',
-        ws: true,
-      },
-    },
-    watch: {
-      // Exclude the backend persistence file from Vite's file watcher
-      // so it doesn't hot-reload the frontend every time a user logs in.
-      ignored: ['**/.data/**'],
-    },
-  },
 })

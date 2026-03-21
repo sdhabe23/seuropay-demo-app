@@ -1,13 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { ArrowLeft, Landmark } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
-import { useBankData } from "../context/BankContext";
 
 export function PaymentMethod(): React.ReactNode {
   const navigate = useNavigate();
   const { darkMode } = useTheme();
-  const { linked } = useBankData();
 
   return (
     <div className={darkMode ? "bg-[#10192B] h-full w-full rounded-3xl p-6 flex flex-col shadow-xl overflow-y-auto" : "bg-gradient-to-br from-blue-50 to-indigo-100 h-full w-full rounded-3xl p-6 flex flex-col shadow-xl overflow-y-auto"}>
@@ -90,29 +88,6 @@ export function PaymentMethod(): React.ReactNode {
             </div>
           </div>
         </button>
-
-        {/* Bank Transfer Option — only shown when bank is linked */}
-        {linked && (
-          <button
-            onClick={() => navigate("/bank-transfer")}
-            className={darkMode ? "bg-[#181F32] border border-[#3AC7B1]/40 rounded-3xl p-6 hover:bg-[#1F2A3A] transition-colors w-full text-left" : "bg-white border border-emerald-300 rounded-3xl p-6 hover:bg-emerald-50 transition-colors w-full text-left"}
-          >
-            <div className="flex items-center space-x-6">
-              <div className={darkMode ? "bg-[#1C3A36] rounded-full p-6 flex-shrink-0" : "bg-emerald-100 rounded-full p-6 flex-shrink-0"}>
-                <Landmark width="48" height="48" stroke="#3AC7B1" strokeWidth="1.5" fill="none" />
-              </div>
-              <div className="flex-1">
-                <h2 className={darkMode ? "text-white text-2xl font-bold mb-2" : "text-gray-900 text-2xl font-bold mb-2"}>Bank Transfer</h2>
-                <p className={darkMode ? "text-[#A3B1CC]" : "text-gray-600"}>Real SEPA transfer via your linked bank</p>
-              </div>
-              <div className="flex-shrink-0">
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#3AC7B1" strokeWidth="2">
-                  <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </div>
-          </button>
-        )}
 
         {/* Contact Option */}
         <button

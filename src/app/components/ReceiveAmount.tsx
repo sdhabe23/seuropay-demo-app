@@ -10,9 +10,13 @@ export function ReceiveAmount(): React.ReactNode {
   const [description, setDescription] = useState("");
 
   const handleProceed = () => {
-    const numAmount = parseFloat(amount);
-    if (amount && numAmount > 0) {
-      navigate("/receive", { state: { amount: numAmount, description: description || undefined } });
+    if (amount && parseFloat(amount) > 0) {
+      const numAmount = parseFloat(amount);
+      sessionStorage.setItem('receiveAmount', numAmount.toString());
+      if (description) {
+        sessionStorage.setItem('receiveDescription', description);
+      }
+      navigate("/receive");
     }
   };
 
